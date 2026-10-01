@@ -12,14 +12,14 @@ public class MainActivity extends Activity {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         LinearLayout body = new LinearLayout(this); body.setOrientation(1); body.setPadding(32,64,32,32); body.setBackgroundColor(Color.rgb(244,247,248));
-        setContentView(body);
+        ScrollView scroll=new ScrollView(this);scroll.setFitsSystemWindows(true);scroll.addView(body);setContentView(scroll);
         TextView title = new TextView(this); title.setText("Focus Layer"); title.setTextSize(32); body.addView(title);
         TextView intro = new TextView(this); intro.setText("Instagram for conversations.\n\nMessaging-only prototype: feed, Reels, Explore and unrecognized screens are covered. Interface changes can block messaging too.\n"); intro.setTextSize(17); body.addView(intro);
         status = new TextView(this); body.addView(status);
         Button enable = new Button(this); enable.setText("Set up protection"); body.addView(enable);
         enable.setOnClickListener(v -> new AlertDialog.Builder(this).setTitle("Accessibility access")
-            .setMessage("Focus Layer inspects Instagram interface IDs to recognize messaging and covers other screens. Android grants broad screen access; this app only inspects Instagram and does not save message text, use the internet, or ask for your password. Only the number of blocking sessions is saved locally. You can disable it at any time in Accessibility settings. Enable Focus Layer on the next screen to consent.")
-            .setPositiveButton("Open settings", (d,w)->startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)))
+            .setMessage("Focus Layer inspects Instagram interface IDs to recognize messaging and covers other screens. Android grants broad screen access; this app checks active-window package metadata and Instagram interface IDs; it does not read or save message text, use the internet, or ask for your password. Only the number of blocking sessions is saved locally. You can disable it at any time in Accessibility settings. Enable Focus Layer on the next screen to consent.")
+            .setPositiveButton("Open settings", (d,w)->{getSharedPreferences("focus",0).edit().putBoolean("consent",true).apply();startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));})
             .setNegativeButton("Cancel",null).show());
         Button open = new Button(this); open.setText("Open Instagram"); body.addView(open);
         open.setOnClickListener(v->{ Intent i=getPackageManager().getLaunchIntentForPackage(FocusService.INSTAGRAM); if(i!=null)startActivity(i); else Toast.makeText(this,"Install Instagram first",Toast.LENGTH_LONG).show(); });
