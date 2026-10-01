@@ -4,7 +4,7 @@ Companion app for the official Instagram Android app. Covers unrecognized screen
 
 ## Current status — read before installing
 
-Source prototype, not a verified working Instagram blocker. The screen-policy unit checks have been run with Java 17. An Android APK has NOT been built in the authoring environment (no Android SDK; Google download host unavailable), and no device/integration test has been performed. The Instagram view IDs are candidate identifiers, not confirmed against your installed version. Messaging and calls may remain blocked until those IDs are calibrated. Accessibility events happen after a screen changes, so content may briefly appear before a cover. Missing accessibility trees, service interruption, in-chat inline media, or changing Instagram interfaces can bypass protection. This is a voluntary focus aid, not tamperproof enforcement. Browser Instagram, Instagram Lite and cloned apps are outside scope.
+Source prototype, not a verified working Instagram blocker. The screen-policy unit checks have been run with Java 17. GitHub Actions successfully compiled and generated a debug APK on 1 October 2026 (run 36807073171); all seven screen-policy checks passed. No device/integration test has been performed. The Instagram view IDs are candidate identifiers, not confirmed against your installed version. Messaging and calls may remain blocked until those IDs are calibrated. Accessibility events happen after a screen changes, so content may briefly appear before a cover. Missing accessibility trees, service interruption, in-chat inline media, or changing Instagram interfaces can bypass protection. This is a voluntary focus aid, not tamperproof enforcement. Browser Instagram, Instagram Lite and cloned apps are outside scope.
 
 ## Build on a computer (Android Studio)
 
@@ -15,7 +15,7 @@ Source prototype, not a verified working Instagram blocker. The screen-policy un
 
 ## Build without Android Studio
 
-Upload the project CONTENTS (including `.github`) to a private GitHub repository with `settings.gradle` at the repository root. In Actions, run **Build Android APK**. Download the **Focus-Layer-debug-APK** artifact from the completed run and unzip it to obtain `app-debug.apk`. The workflow uses third-party GitHub Actions and Google/Maven build downloads. This is a suggested workflow, not a build already performed. Workflow debug keys are ephemeral: future APKs may need uninstall/reinstall. For durable releases configure your own signing key; never commit private keys.
+The project is published in this repository with `settings.gradle` at the repository root. In Actions, run **Build Android APK**. Download the **Focus-Layer-debug-APK** artifact from the completed run and unzip it to obtain `app-debug.apk`. The workflow uses third-party GitHub Actions and Google/Maven build downloads. The workflow was run successfully; the APK is available in the completed run's artifacts. Workflow debug keys are ephemeral: future APKs may need uninstall/reinstall. For durable releases configure your own signing key; never commit private keys.
 
 ## Samsung / Android phone setup
 
