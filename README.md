@@ -1,21 +1,21 @@
-# Focus Layer — Android prototype v0.1
+# Focus Layer — Android prototype v0.2
 
 Companion app for the official Instagram Android app. Covers unrecognized screens with an accessibility overlay; only recognized inbox, conversation and call screens are allowed. Feed, profiles, Stories, Explore and Reels are blocked by default. No Instagram login, root or modified Instagram APK is used.
 
 ## Current status — read before installing
 
-Source prototype, not a verified working Instagram blocker. The screen-policy unit checks have been run with Java 17. GitHub Actions successfully compiled and generated a debug APK on 1 October 2026 (run 36807073171); all seven screen-policy checks passed. No device/integration test has been performed. The Instagram view IDs are candidate identifiers, not confirmed against your installed version. Messaging and calls may remain blocked until those IDs are calibrated. Accessibility events happen after a screen changes, so content may briefly appear before a cover. Missing accessibility trees, service interruption, in-chat inline media, or changing Instagram interfaces can bypass protection. This is a voluntary focus aid, not tamperproof enforcement. Browser Instagram, Instagram Lite and cloned apps are outside scope.
+Source prototype, not a verified working Instagram blocker. The screen-policy unit checks have been run with Java 17. GitHub Actions successfully compiled and generated the original v0.1 debug APK on 1 October 2026 (run 36807073171); all seven screen-policy checks passed. No device/integration test has been performed. The Instagram view IDs are candidate identifiers, not confirmed against your installed version. Messaging and calls may remain blocked until those IDs are calibrated. Accessibility events happen after a screen changes, so content may briefly appear before a cover. Missing accessibility trees, service interruption, in-chat inline media, or changing Instagram interfaces can bypass protection. This is a voluntary focus aid, not tamperproof enforcement. Browser Instagram, Instagram Lite and cloned apps are outside scope.
 
 ## Build on a computer (Android Studio)
 
 1. Extract this folder and open `focus-layer` in Android Studio.
 2. Use JDK 17 for Gradle. Install Android SDK Platform 35 and Build Tools 35.0.0 through SDK Manager. Let Gradle sync finish; internet access is needed.
-3. Build > Generate App Bundles or APKs > Generate APKs (menu wording varies by Android Studio version), or run `gradle :app:assembleDebug` with Gradle 8.9 installed.
-4. The debug APK is `app/build/outputs/apk/debug/app-debug.apk`. It is signed automatically by your local debug key. Keep the same key for subsequent updates, or uninstall/reinstall (local counter resets).
+3. Build > Generate App Bundles or APKs > Generate APKs (menu wording varies by Android Studio version), or run `gradle :app:assembleRelease` with Gradle 8.9 installed.
+4. The personal-test APK is `app/build/outputs/apk/release/app-release.apk`. It is signed automatically by your local debug key. Keep the same key for subsequent updates, or uninstall/reinstall (local counter resets).
 
 ## Build without Android Studio
 
-The project is published in this repository with `settings.gradle` at the repository root. In Actions, run **Build Android APK**. Download the **Focus-Layer-debug-APK** artifact from the completed run and unzip it to obtain `app-debug.apk`. The workflow uses third-party GitHub Actions and Google/Maven build downloads. The workflow was run successfully; the APK is available in the completed run's artifacts. Workflow debug keys are ephemeral: future APKs may need uninstall/reinstall. For durable releases configure your own signing key; never commit private keys.
+The project is published in this repository with `settings.gradle` at the repository root. In Actions, run **Build Android APK**. Download the **Focus-Layer-reviewed-APK** artifact from the completed run and unzip it to obtain `app-debug.apk`. The workflow uses third-party GitHub Actions and Google/Maven build downloads. The workflow was run successfully; the APK is available in the completed run's artifacts. Workflow debug keys are ephemeral: future APKs may need uninstall/reinstall. For durable releases configure your own signing key; never commit private keys.
 
 ## Samsung / Android phone setup
 
@@ -47,7 +47,7 @@ Press Exit Instagram on the cover, then open Android Settings > Accessibility > 
 
 ## Privacy / architecture
 
-No INTERNET permission, analytics, password access, notification listener, VPN or storage permission. Android accessibility grants broad potential access; the implementation retrieves only the active Instagram application window, inspects visible resource IDs, and never reads node text or saves conversation contents. It receives window-change events for other packages solely to dismiss the cover when you leave Instagram. One local integer tracks blocking sessions, not attempts or time saved. No timings are inferred.
+No INTERNET permission, analytics, password access, notification listener, VPN or storage permission. Android accessibility grants broad potential access; the implementation retrieves active-window package metadata, traverses interface IDs only in Instagram, inspects visible resource IDs, and never calls the node text getter or saves conversation contents. It receives window-change events for other packages solely to dismiss the cover when you leave Instagram. A local consent flag records acceptance of the disclosure. One local integer tracks blocking sessions, not attempts or time saved. No timings are inferred.
 
 MainActivity: disclosure, setup, service state and local counter.
 FocusService: event-driven classifier, blocking cover, explicit inbox navigation, Back/Home recovery.
@@ -65,3 +65,7 @@ https://developer.android.com/guide/topics/ui/accessibility/views/service
 https://developer.android.com/reference/android/accessibilityservice/AccessibilityService
 
 Personal prototype. A Play Store release requires a separate policy review, disclosure/consent validation, signing and extensive device tests.
+
+## Review update v0.2
+
+See SECURITY_REVIEW.md for scope and remaining risks. The personal-test release build disables debugging but still uses an ephemeral debug signing certificate, not production signing. Uninstall the old APK before installing a build with a different signing certificate. The cover includes Turn off protection. Unexpected runtime failures disable the service; blocking therefore stops until you re-enable it. The app requires accepting its disclosure before service activation. CI verifies signatures, checks that the APK requests no uses-permissions and is not debuggable, and produces a SHA-256 checksum. These checks do not establish real-device safety or Instagram compatibility.
