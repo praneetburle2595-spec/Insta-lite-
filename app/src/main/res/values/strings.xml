@@ -1,0 +1,1 @@
+<resources><string name="service_description">Covers Instagram screens except recognized messaging and calls. Inspects Instagram interface identifiers locally; does not store message content. You can disable this service in Android Settings anytime.</string></resources>
